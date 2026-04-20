@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── SOA Brand Tokens ─────────────────────────────────────────────────────── */
+:root {
+  --soa-blue:         #00538e;
+  --soa-blue-hover:   #196499;
+  --soa-blue-active:  #004272;
+  --soa-navy:         #0d1c27;
+  --soa-deep-navy:    #023153;
+  --soa-red:          #c71d28;
+  --soa-yellow:       #ffd84e;
+  --soa-teal:         #74cbc8;
+  --soa-lime:         #a5c800;
+  --soa-grey-light:   #f8f8f9;
+  --soa-grey-mid:     #f3f4f4;
+  --soa-grey-border:  #cfd2d4;
+  --soa-grey-text:    #566068;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-primary-900;
+  font-feature-settings: 'rlig' 1 'calt' 1;
+  color: var(--soa-navy);
+}
+
+/* Dark mode — navy-based (matches SOA footer aesthetic) */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0d1c27;
+    color: #f8f8f9;
+  }
+}
+
+.dark body,
+[data-theme="dark"] body {
+  background-color: #0d1c27;
+  color: #f8f8f9;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--soa-grey-mid);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--soa-grey-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--soa-grey-text);
+}
+
+/* Dark scrollbar */
+.dark ::-webkit-scrollbar-track  { background-color: #1a2c3d; }
+.dark ::-webkit-scrollbar-thumb  { background-color: #023153; }
+.dark ::-webkit-scrollbar-thumb:hover { background-color: #196499; }
+
+/* ─── Smooth transitions ───────────────────────────────────────────────────── */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* ─── Components ───────────────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-medium
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* SOA primary blue button */
+  .btn-primary {
+    @apply btn text-white;
+    background-color: var(--soa-blue);
+  }
+  .btn-primary:hover  { background-color: var(--soa-blue-hover); }
+  .btn-primary:active { background-color: var(--soa-blue-active); }
+  .btn-primary:focus  { box-shadow: 0 0 0 3px rgba(0, 83, 142, 0.35); }
+
+  /* SOA dark navy button (footer / dark-surface CTAs) */
+  .btn-dark {
+    @apply btn text-white;
+    background-color: var(--soa-navy);
+  }
+  .btn-dark:hover { background-color: #25333d; }
+
+  /* SOA red / banner button */
+  .btn-accent {
+    @apply btn text-white;
+    background-color: var(--soa-red);
+  }
+  .btn-accent:hover { background-color: #a51521; }
+
+  /* Secondary / ghost */
+  .btn-secondary {
+    @apply btn bg-white border text-primary-900;
+    border-color: var(--soa-grey-border);
+    color: var(--soa-navy);
+  }
+  .btn-secondary:hover { background-color: var(--soa-grey-light); }
+
+  /* Success */
+  .btn-success {
+    @apply btn text-white;
+    background-color: #a5c800;
+  }
+  .btn-success:hover { background-color: #88a600; }
+
+  /* Error */
+  .btn-error {
+    @apply btn text-white;
+    background-color: var(--soa-red);
+  }
+  .btn-error:hover { background-color: #a51521; }
+
+  /* Sizes */
+  .btn-sm { @apply px-3 py-1.5 text-sm; }
+  .btn-md { @apply px-4 py-2 text-base; }
+  .btn-lg { @apply px-6 py-3 text-lg; }
+
+  /* ── Cards ── */
+  .card {
+    @apply rounded-lg border bg-white p-6 shadow-sm hover:shadow-md;
+    border-color: var(--soa-grey-border);
+  }
+  .dark .card {
+    background-color: #1a2c3d;
+    border-color: #023153;
+  }
+
+  .card-hover {
+    @apply card cursor-pointer transition-all hover:scale-105;
+  }
+
+  /* ── Input fields ── */
+  .input-field {
+    @apply rounded-lg border bg-white px-4 py-2 placeholder-gray-500;
+    border-color: var(--soa-grey-border);
+    color: var(--soa-navy);
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--soa-blue);
+    box-shadow: 0 0 0 2px rgba(0, 83, 142, 0.2);
+  }
+  .dark .input-field {
+    background-color: #1a2c3d;
+    border-color: #023153;
+    color: #f8f8f9;
+  }
+
+  /* ── Badges / Pills ── */
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+  }
+
+  /* SOA pill variants */
+  .badge-primary, .pill-blue {
+    @apply badge;
+    background-color: #eaf3fa;
+    color: #023153;
+  }
+  .badge-success, .pill-green {
+    @apply badge;
+    background-color: #dbf6ef;
+    color: #00422e;
+  }
+  .badge-error, .pill-red {
+    @apply badge;
+    background-color: #fedfde;
+    color: #550300;
+  }
+  .badge-accent, .pill-yellow {
+    @apply badge;
+    background-color: #fffae7;
+    color: #3e2500;
+  }
+  .pill-purple {
+    @apply badge;
+    background-color: #edecfa;
+    color: #09034c;
+  }
+  .pill-lime {
+    @apply badge;
+    background-color: #f2f8d6;
+    color: #2d3700;
+  }
+
+  /* ── Text gradient — SOA blue → teal ── */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, var(--soa-blue), var(--soa-teal));
+  }
+
+  /* ── Link styles ── */
+  .soa-link {
+    color: var(--soa-blue);
+    text-decoration: none;
+  }
+  .soa-link:hover {
+    color: var(--soa-deep-navy);
+    text-decoration: underline;
+  }
+
+  /* ── Section / page backgrounds ── */
+  .bg-soa-light  { background-color: var(--soa-grey-light); }
+  .bg-soa-mid    { background-color: var(--soa-grey-mid); }
+  .bg-soa-card   { background-color: #f2f6f9; }
+
+  /* ── Nav / header ── */
+  .nav-soa {
+    background-color: var(--soa-navy);
+    color: #ffffff;
+  }
+
+  /* ── Footer ── */
+  .footer-soa {
+    background-color: var(--soa-navy);
+    color: #ffffff;
+  }
+
+  /* ── CTA / registration box ── */
+  .cta-soa {
+    background-color: var(--soa-blue);
+    color: #ffffff;
+  }
+  .cta-soa-accent {
+    background-color: var(--soa-yellow);
+    color: var(--soa-navy);
+  }
+}
+
+/* ─── Animations ───────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+.animate-fade-in    { animation: fadeIn 0.3s ease-in; }
+.animate-slide-in   { animation: slideIn 0.3s ease-out; }
+.animate-pulse-glow { animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+/* ─── Utilities ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px)  { .hide-mobile  { display: none; } }
+@media (min-width: 769px)  { .hide-desktop { display: none; } }
+
+.math { @apply inline-block; }
+
+.skeleton {
+  @apply animate-pulse rounded;
+  background-color: var(--soa-grey-mid);
+}
+.dark .skeleton { background-color: #1a2c3d; }

@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: soa_postgres
+    environment:
+      POSTGRES_USER: soa_user
+      POSTGRES_PASSWORD: soa_password_dev
+      POSTGRES_DB: soa_exams
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soa_user -d soa_exams"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - soa_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: soa_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - soa_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: soa_backend
+    environment:
+      DATABASE_URL: postgresql://soa_user:soa_password_dev@postgres:5432/soa_exams
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: development
+      SECRET_KEY: dev_secret_key_change_in_production
+      DEBUG: "True"
+      CORS_ORIGINS: http://localhost:3001,http://localhost:8001
+      LOG_LEVEL: DEBUG
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - soa_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: soa_frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8001/api/v1
+      NODE_ENV: development
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - soa_network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  soa_network:
+    driver: bridge

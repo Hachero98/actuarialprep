@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.venv/
+venv/
+env/
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/output/
+*.egg-info/
+dist/
+.eggs/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+backend/.env
+frontend/.env.local
+
+# Database
+*.sqlite
+*.db
+postgres_data/
+
+# Large PDF files (textbooks — keep SOA official docs)
+ACTEX*.pdf
+Mathematics of Investment*.pdf
+Probability for Risk Management*.pdf
+*.djvu
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker volumes
+postgres_data/
+redis_data/
+
+# Test outputs
+backend/tests/__pycache__/
+.pytest_cache/
+htmlcov/
+.coverage
